@@ -7,5 +7,9 @@ public class NeedDay {
         LocalDate date = LocalDate.now().plusDays(3);
         return date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString();
     }
+    public String needDay7() {
+        LocalDate date = LocalDate.now().plusDays(7);
+        return date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")).toString();
+    }
 
 }
