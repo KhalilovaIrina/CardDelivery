@@ -6,14 +6,19 @@ import org.openqa.selenium.Keys;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryComplexTest {
     NeedDay day = new NeedDay();
-    LocalDate current = LocalDate.now();
+    String planningDate = day.generateDate(7, "dd.MM.yyyy");
+
+    LocalDate currentDate = LocalDate.now();
     LocalDate planning = LocalDate.now().plusDays(7);
+
+
 
     @Test
     public void shoudRegistred1() {
@@ -22,7 +27,7 @@ public class CardDeliveryComplexTest {
         $x("//*[contains(text(),'Йошкар')]").click();
         $("[data-test-id='date'] input").click();
 
-        if (current.getMonthValue() < planning.getMonthValue()) {
+        if (currentDate.getMonthValue() < planning.getMonthValue()) {
             $("[data-step='1'] ").click();
         }
         $x("//td[text()='" + planning.getDayOfMonth() + "']").click();
@@ -32,7 +37,9 @@ public class CardDeliveryComplexTest {
         $x("//*[contains(text(),'Я соглашаюсь с условиями')]").click();
         $x("//*[contains(text(),'Забронировать')]").click();
         $("[data-test-id=notification]").should(Condition.appear, Duration.ofSeconds(15));
-
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
     }
 
 
